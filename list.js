@@ -14,6 +14,7 @@ fetch("want.json")
       const li = document.createElement("li");
       li.style.marginBottom = "20px";
 
+      // 中点なしでリンクだけ表示
       li.innerHTML = `<a href="${idol.homepage}" target="_blank">${idol.name}</a>`;
       ul.appendChild(li);
     });
