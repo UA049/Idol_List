@@ -1,3 +1,7 @@
+// --- スマホ向けの基本スタイル ---
+document.body.style.fontSize = "32px";   // 文字サイズ2倍
+document.body.style.lineHeight = "1.6";
+
 // --- 見たいアイドル一覧（want.json） ---
 fetch("want.json")
   .then(res => res.json())
@@ -8,6 +12,8 @@ fetch("want.json")
 
     data.forEach(idol => {
       const li = document.createElement("li");
+      li.style.marginBottom = "20px";
+
       li.innerHTML = `<a href="${idol.homepage}" target="_blank">${idol.name}</a>`;
       ul.appendChild(li);
     });
@@ -23,25 +29,37 @@ fetch("seen.json")
 
     data.forEach(idol => {
       const li = document.createElement("li");
+      li.style.marginBottom = "20px";
+
+      // ▶ / ▼ の矢印
+      const arrow = document.createElement("span");
+      arrow.textContent = "▶ ";
+      arrow.style.cursor = "pointer";
 
       // name（常に表示）
-      const name = document.createElement("div");
+      const name = document.createElement("span");
       name.textContent = idol.name;
       name.style.cursor = "pointer";
       name.style.fontWeight = "bold";
 
       // note（プルダウンで表示）
       const note = document.createElement("div");
-      note.textContent = idol.note || "";
+      note.textContent = `- ${idol.note || ""}`;
       note.style.display = "none";
-      note.style.marginLeft = "1em";
+      note.style.marginLeft = "1.5em";
       note.style.color = "#555";
 
       // クリックで note を開閉
-      name.addEventListener("click", () => {
-        note.style.display = note.style.display === "none" ? "block" : "none";
-      });
+      const toggle = () => {
+        const isHidden = note.style.display === "none";
+        note.style.display = isHidden ? "block" : "none";
+        arrow.textContent = isHidden ? "▼ " : "▶ ";
+      };
 
+      arrow.addEventListener("click", toggle);
+      name.addEventListener("click", toggle);
+
+      li.appendChild(arrow);
       li.appendChild(name);
       li.appendChild(note);
       ul.appendChild(li);
