@@ -2,7 +2,9 @@
 document.body.style.fontSize = "32px";   // 文字サイズ2倍
 document.body.style.lineHeight = "1.6";
 
-// --- 見たいアイドル一覧（want.json） ---
+// =====================================================
+// ① 見たいアイドル一覧（want.json）
+// =====================================================
 fetch("want.json")
   .then(res => res.json())
   .then(data => {
@@ -12,15 +14,33 @@ fetch("want.json")
 
     data.forEach(idol => {
       const li = document.createElement("li");
-      li.style.marginBottom = "20px";
-
-      // 中点なしでリンクだけ表示
       li.innerHTML = `<a href="${idol.homepage}" target="_blank">${idol.name}</a>`;
       ul.appendChild(li);
     });
   });
 
-// --- 見たことあるアイドル一覧（seen.json） ---
+// =====================================================
+// ② もう一回見たいアイドル一覧（seen.json の homepage があるもの）
+// =====================================================
+fetch("seen.json")
+  .then(res => res.json())
+  .then(data => {
+    const again = data
+      .filter(idol => idol.homepage) // homepage がある＝もう一回見たい
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const ul = document.getElementById("again-list");
+
+    again.forEach(idol => {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${idol.homepage}" target="_blank">${idol.name}</a>`;
+      ul.appendChild(li);
+    });
+  });
+
+// =====================================================
+// ③ 見たことあるアイドル一覧（seen.json）
+// =====================================================
 fetch("seen.json")
   .then(res => res.json())
   .then(data => {
@@ -30,7 +50,6 @@ fetch("seen.json")
 
     data.forEach(idol => {
       const li = document.createElement("li");
-      li.style.marginBottom = "20px";
 
       // ▶ / ▼ の矢印
       const arrow = document.createElement("span");
